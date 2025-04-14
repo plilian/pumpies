@@ -24,7 +24,6 @@ import asyncio
 import urllib.parse
 
 
-
 load_dotenv("tg.env")
 
 user_last_command_time = {}
@@ -53,7 +52,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     welcome_message = (
-        "👋 **Welcome to Coin Lens!**\n\n"
+        "👋 **Welcome to Pumpies!**\n\n"
         "I'm here to help you stay updated with the latest cryptocurrency data. "
         "Use the following commands to interact with me:\n\n"
 
@@ -826,6 +825,7 @@ async def latest_boosted_tokens(update: Update, context: ContextTypes.DEFAULT_TY
         await update.message.reply_text(f"An error occurred while fetching data: {e}")
 
 
+
 async def token_orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if not await check_rate_limit(update):
@@ -870,7 +870,7 @@ async def token_orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             order_type = order.get("type", "Unknown")
             status = order.get("status", "Unknown")
             timestamp = order.get("paymentTimestamp", 0)
-            datetime_str = datetime.datetime.fromtimestamp(timestamp / 1000).strftime("%Y-%m-%d %H:%M:%S")
+            datetime_str = datetime.fromtimestamp(timestamp / 1000).strftime("%Y-%m-%d %H:%M:%S")
 
             message += (
                 f"🔹 **Type**: `{type_mapping.get(order_type, order_type)}`\n"
@@ -883,6 +883,7 @@ async def token_orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
     except requests.exceptions.RequestException as e:
         await update.message.reply_text(f"An error occurred while fetching data: {e}")
+
 
 
 
@@ -911,57 +912,57 @@ async def trade_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             await update.message.reply_text("No data found for the given token address. Please try again.")
             return
 
-        message = f"📊 **Token Info for {token_address}** 📊\n\n"
+        pair = pairs[0]
 
-        for pair in pairs:
-            dex_id = pair.get("dexId", "N/A")
-            dex_url = pair.get("url", "N/A")
-            pair_address = pair.get("pairAddress", "N/A")
-            base_symbol = pair.get("baseToken", {}).get("symbol", "N/A")
-            quote_symbol = pair.get("quoteToken", {}).get("symbol", "N/A")
-            price_native = pair.get("priceNative", "N/A")
-            price_usd = pair.get("priceUsd", "N/A")
-            transactions = pair.get("txns", {})
-            volume = pair.get("volume", {})
-            price_change = pair.get("priceChange", {})
-            liquidity = pair.get("liquidity", {}).get("usd", 0)
-            market_cap = pair.get("marketCap", "N/A")
-            fdv = pair.get("fdv", "N/A")
-            active_boosts = pair.get("boosts", {}).get("active", "N/A")
+        dex_id = pair.get("dexId", "N/A")
+        dex_url = pair.get("url", "N/A")
+        pair_address = pair.get("pairAddress", "N/A")
+        base_symbol = pair.get("baseToken", {}).get("symbol", "N/A")
+        quote_symbol = pair.get("quoteToken", {}).get("symbol", "N/A")
+        price_native = pair.get("priceNative", "N/A")
+        price_usd = pair.get("priceUsd", "N/A")
+        transactions = pair.get("txns", {})
+        volume = pair.get("volume", {})
+        price_change = pair.get("priceChange", {})
+        liquidity = pair.get("liquidity", {}).get("usd", 0)
+        market_cap = pair.get("marketCap", "N/A")
+        fdv = pair.get("fdv", "N/A")
+        active_boosts = pair.get("boosts", {}).get("active", "N/A")
 
-            txns_message = "\n".join(
-                [
-                    f"🕒 `{key}`: Buys: `{value.get('buys', 0)}`, Sells: `{value.get('sells', 0)}`"
-                    for key, value in transactions.items()
-                ]
-            )
+        txns_message = "\n".join(
+            [
+                f"🕒 `{key}`: Buys: `{value.get('buys', 0)}`, Sells: `{value.get('sells', 0)}`"
+                for key, value in transactions.items()
+            ]
+        )
 
-            volume_message = "\n".join(
-                [f"🕒 `{key}`: `${value:,.2f}`" for key, value in volume.items()]
-            )
+        volume_message = "\n".join(
+            [f"🕒 `{key}`: `${value:,.2f}`" for key, value in volume.items()]
+        )
 
-            price_change_message = "\n".join(
-                [f"🕒 `{key}`: `{value:.2f}%`" for key, value in price_change.items()]
-            )
+        price_change_message = "\n".join(
+            [f"🕒 `{key}`: `{value:.2f}%`" for key, value in price_change.items()]
+        )
 
-            message += (
-                f"🌐 **DEX**: `{dex_id}`\n"
-                f"🔗 [DEX Screener URL]({dex_url})\n"
-                f"🏷️ **Pair Address**: `{pair_address}`\n"
-                f"🔄 **Base - Quote**: `{base_symbol} / {quote_symbol}`\n"
-                f"💵 **Price (Native)**: `{price_native}`\n"
-                f"💲 **Price (USD)**: `{price_usd}`\n\n"
-                f"📈 **Transactions:**\n{txns_message}\n\n"
-                f"📊 **Volume (USD):**\n{volume_message}\n\n"
-                f"📉 **Price Change (%):**\n{price_change_message}\n\n"
-                f"💧 **Liquidity (USD)**: `${liquidity:,.2f}`\n"
-                f"🏦 **Market Cap**: `${market_cap}`\n"
-                f"🔮 **FDV**: `${fdv}`\n"
-                f"🔥 **Active Boosts**: `{active_boosts}`\n"
-                "------------------------------------\n"
-            )
+        message = (
+            f"📊 **Token Info for {token_address}** 📊\n\n"
+            f"🌐 **DEX**: `{dex_id}`\n"
+            f"🔗 [DEX Screener URL]({dex_url})\n"
+            f"🏷️ **Pair Address**: `{pair_address}`\n"
+            f"🔄 **Base - Quote**: `{base_symbol} / {quote_symbol}`\n"
+            f"💵 **Price (Native)**: `{price_native}`\n"
+            f"💲 **Price (USD)**: `{price_usd}`\n\n"
+            f"📈 **Transactions:**\n{txns_message}\n\n"
+            f"📊 **Volume (USD):**\n{volume_message}\n\n"
+            f"📉 **Price Change (%):**\n{price_change_message}\n\n"
+            f"💧 **Liquidity (USD)**: `${liquidity:,.2f}`\n"
+            f"🏦 **Market Cap**: `${market_cap}`\n"
+            f"🔮 **FDV**: `${fdv}`\n"
+            f"🔥 **Active Boosts**: `{active_boosts}`\n"
+            "------------------------------------\n"
+        )
 
-        await update.message.reply_text(message, parse_mode="Markdown", disable_web_page_preview=False)
+        await update.message.reply_text(message, parse_mode="Markdown", disable_web_page_preview=True)
 
     except requests.exceptions.RequestException as e:
         await update.message.reply_text(f"An error occurred while fetching data: {e}")
