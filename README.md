@@ -54,5 +54,5 @@ Pumpies is a feature-rich Telegram bot that provides real-time cryptocurrency da
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/plilian/coin_lens_tg_bot.git
-   cd coin_lens_tg_bot
+   git clone https://github.com/plilian/pumpies.git
+   cd pumpies
