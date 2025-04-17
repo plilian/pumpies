@@ -15,9 +15,9 @@ limitations under the License.
 
 
 
-# Coin Lens Telegram Bot
+# Pumpies Telegram Bot
 
-Coin Lens is a feature-rich Telegram bot that provides real-time cryptocurrency data, insights, and tools for enthusiasts, traders, and researchers. With easy-to-use commands, users can fetch details about cryptocurrencies, market trends, trading insights, and much more.
+Pumpies is a feature-rich Telegram bot that provides real-time cryptocurrency data, insights, and tools for enthusiasts, traders, and researchers. With easy-to-use commands, users can fetch details about cryptocurrencies, market trends, trading insights, and much more.
 
 ## Features
 
